@@ -13,7 +13,9 @@ const AutheticationForm = ({ token }) => {
 	const history = useHistory()
 
 	useEffect(() => {
-		console.log(token)
+		if(cookies.token) {
+			history.push('/home')
+		}
 	})
 
 	const onFinish = async (values) => {

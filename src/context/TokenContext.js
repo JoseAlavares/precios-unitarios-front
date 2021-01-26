@@ -1,25 +1,32 @@
-import React, { useState, useEffect, createContext } from 'react'
-import { useHistory, useLocation } from "react-router-dom";
+import React, { useState, useEffect, createContext, useContext } from 'react'
+import { useHistory, withRouter } from "react-router-dom";
 import { useCookies } from 'react-cookie'
 
-const TokenContext = createContext()
+const TokenContext = createContext({
+  isLoggedIn: false
+})
 
 export const TokenProvider = ({ children }) => {
     const [cookies, setCookie, removeCookie] = useCookies(['token'])
+    const tokenContext = useContext(TokenContext)
     
     const history = useHistory()
-    const location = useLocation()
+    //const location = useLocation()
     const [loginToken, setLoginToken] = useState('')
 
     useEffect(()=>{
-        if(location.pathname === '/auth' && cookies.token) {
-          history.push('/home')
-        }
+      console.log(tokenContext.isLoggedIn)
+        //if(window.location.pathname === '/auth' && cookies.token) {
+        // if(!tokenContext.isLoggedIn) {
+        //   //history.replace('/auth')
+        //   history.push('/home')
+        // }
 
         if(!cookies.hasOwnProperty('token')) {
+          removeCookie('token')
           history.push('/auth')
         }
-    }, []) 
+    }, [tokenContext.isLoggedIn]) 
 
   return (
     <TokenContext.Provider>
@@ -28,4 +35,4 @@ export const TokenProvider = ({ children }) => {
   )
 }
 
-export default TokenContext
+export default withRouter(TokenContext)

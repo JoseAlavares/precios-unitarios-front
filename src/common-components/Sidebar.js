@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { Menu , Layout} from 'antd';
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 const { Sider } = Layout;
@@ -20,8 +21,8 @@ class Sidebar extends React.Component {
           style={{ height: '100%', borderRight: 0 }}
         >
           <SubMenu key="sub1" icon={<UserOutlined />} title="Usuarios">
-            <Menu.Item key="1">agregar</Menu.Item>
-            <Menu.Item key="2">editar</Menu.Item>
+            <Menu.Item key="1" ><Link to='/add-user'>Agregar</Link></Menu.Item>
+            <Menu.Item key="2"><Link to='/edit-user'>Editar</Link></Menu.Item>
             <Menu.Item key="3">consultar</Menu.Item>
             <Menu.Item key="4">eliminar</Menu.Item>
           </SubMenu>

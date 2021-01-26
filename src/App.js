@@ -9,15 +9,31 @@ import { TokenProvider } from './context/TokenContext'
 import {
     BrowserRouter,
     Route,
-    Switch
+    Switch,
+    useHistory
 } from 'react-router-dom'
 import Authetication from './containers/Authentication'
 import Registry from './containers/Registry'
-import { withCookies } from 'react-cookie'
+import { withCookies, useCookies } from 'react-cookie'
 
 const { Content } = Layout
 
-function App() {    
+function App() {
+    const history = useHistory()
+    const [cookies, setCookie, removeCookie] = useCookies(['token'])
+
+    const logout = () => {
+        removeCookie('token')
+        ///history.push('/auth')
+        //window.location.href = '/auth'
+    }
+
+    let open = XMLHttpRequest.prototype.open
+    XMLHttpRequest.prototype.open = function() {
+        this.addEventListener('load', (event) => event.target.status === 401 ? logout() : null, false)
+        open.apply(this, arguments)
+    }
+
     return (        
         <BrowserRouter> 
             <TokenProvider>                                       
