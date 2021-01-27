@@ -35,14 +35,16 @@ const AutheticationForm = ({ token }) => {
 
 			return
 		}
+
 		const {data: {data}} = result.response
-		console.log(data)
+		
 		setLoading(false)
 		setCookie('token', data, {
 			//httpOnly: true, 
 			sameSite: 'strict', 
 			secure: true
 		})
+		
 		history.push('/')
 	}
 

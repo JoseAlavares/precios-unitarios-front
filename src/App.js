@@ -15,6 +15,8 @@ import {
 import Authetication from './containers/Authentication'
 import Registry from './containers/Registry'
 import { withCookies, useCookies } from 'react-cookie'
+import { Provider } from 'react-redux'
+import store from './store'
 
 const { Content } = Layout
 
@@ -34,31 +36,33 @@ function App() {
         open.apply(this, arguments)
     }
 
-    return (        
-        <BrowserRouter> 
-            <TokenProvider>                                       
-                <Switch>
-                    <Route exact path="/registry" component={Registry}/>
-                    <Route exact path="/auth" component={Authetication}/>                    
-                    <Layout className="dashboard">             
-                        <Headerbar/>            
-                        <Layout style={{ padding: '0 0px 24px' }}>
-                            <Sidebar/>                
-                            <Content
-                                className="site-layout-background"
-                                style={{
-                                    padding: 24,
-                                    margin: 0,
-                                    minHeight: 280,
-                                }}
-                                >
-                                <Routes/>
-                            </Content>
+    return (
+        <Provider store={store}>
+            <BrowserRouter> 
+                <TokenProvider>                                       
+                    <Switch>
+                        <Route exact path="/registry" component={Registry}/>
+                        <Route exact path="/auth" component={Authetication}/>                    
+                        <Layout className="dashboard">             
+                            <Headerbar/>            
+                            <Layout style={{ padding: '0 0px 24px' }}>
+                                <Sidebar/>                
+                                <Content
+                                    className="site-layout-background"
+                                    style={{
+                                        padding: 24,
+                                        margin: 0,
+                                        minHeight: 280,
+                                    }}
+                                    >
+                                    <Routes/>
+                                </Content>
+                            </Layout>
                         </Layout>
-                    </Layout>
-                </Switch>
-            </TokenProvider>         
-        </BrowserRouter>      
+                    </Switch>
+                </TokenProvider>         
+            </BrowserRouter>
+        </Provider>
     )
 }
 
