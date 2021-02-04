@@ -5,12 +5,11 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 
 export const login = async (data) => {
     try {
-        const result = await axios.post('/authentication', data)
-        
+        const result = await axios.post('/authentication', data)        
+
         if(!result) {
             return {error: true, message: 'There\'s been a problem'}
         }
-
         
         return {message: 'Successful', response: result}
     } catch (error) {
@@ -18,7 +17,20 @@ export const login = async (data) => {
             //console.log(error.response.data)
             //console.log(error.response.status)
             //return {error: true, message: error.response.data.message}
-            return {error: true, message: 'Error in the server'}
+            let message = ""
+            console.log(error.response.status)
+            switch(parseInt(error.response.status)){
+                case 404:
+                    message = 'El usuario no existe'
+                    break
+                case 422:
+                    message = 'La solicitud no puede ser procesada'
+                    break
+                case 500:
+                    message = 'Error en el servidor'
+                    break
+            }
+            return {error: true, message: message}
         }
         else if (error.request) {
             // The request was made but no response was received

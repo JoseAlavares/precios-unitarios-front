@@ -1,14 +1,6 @@
-// cargamos la función para crear un store
-import { createStore } from 'redux'
+import { createStore } from "redux"
+import rootReducer from "./reducers.js"
 
-// cargamos nuestros reducers (ya combinados)
-import reducers from './reducers.js';// definimos el estado inicial
-
-const initialState = {
-    todos: [],
-}
-
-// creamos el store
-const store = createStore(reducers, initialState)
+const store = createStore(rootReducer)
 
 export default store
