@@ -1,6 +1,7 @@
 import React from 'react'
 import { Switch, Route } from "react-router-dom"
 import AddUser from '../components/AddUser'
+import UserContainer from '../containers/UserContainer'
 
   const routes = [
     {
@@ -19,6 +20,10 @@ import AddUser from '../components/AddUser'
     {
       path: "/add-user",
       main: () => <AddUser/>
+    },
+    {
+      path:"/users",
+      main: () => <UserContainer/>
     }
 ]
 

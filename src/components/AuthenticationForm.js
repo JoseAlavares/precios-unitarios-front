@@ -16,7 +16,7 @@ const AutheticationForm = ({ token }) => {
 		if(cookies.token) {
 			history.push('/home')
 		}
-	})
+	}, [])
 
 	const onFinish = async (values) => {
 		setLoading(true)

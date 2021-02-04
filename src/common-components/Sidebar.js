@@ -23,6 +23,7 @@ class Sidebar extends React.Component {
           <SubMenu key="sub1" icon={<UserOutlined />} title="Usuarios">
             <Menu.Item key="1" ><Link to='/add-user'>Agregar</Link></Menu.Item>
             <Menu.Item key="2"><Link to='/edit-user'>Editar</Link></Menu.Item>
+            <Menu.Item key="1" ><Link to='/users'>Usuarios</Link></Menu.Item>
             <Menu.Item key="3">consultar</Menu.Item>
             <Menu.Item key="4">eliminar</Menu.Item>
           </SubMenu>
