@@ -21,7 +21,7 @@ const AutheticationForm = ({ token }) => {
 	const onFinish = async (values) => {
 		setLoading(true)
 		const result = await login(values)
-
+		
 		if(result.error) {
 			setShowAlert(true)
 			setAlertConf({
@@ -77,7 +77,9 @@ const AutheticationForm = ({ token }) => {
 						required: true,
 						message: 'Please input your email!',
 					}]}>
-					<Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+					<Input 
+						prefix={<UserOutlined className="site-form-item-icon" />} 
+						placeholder="Username" />
 				</Form.Item>
 				<Form.Item
 					name="password"
