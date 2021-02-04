@@ -1,5 +1,6 @@
 import React from 'react'
 import { Switch, Route } from "react-router-dom"
+import AddUser from '../components/AddUser'
 
   const routes = [
     {
@@ -14,6 +15,10 @@ import { Switch, Route } from "react-router-dom"
     {
       path: "/profile",
       main: () => <h2>Profile</h2>
+    },
+    {
+      path: "/add-user",
+      main: () => <AddUser/>
     }
 ]
 
@@ -22,9 +27,9 @@ const Routes = () => {
         <Switch>
             {routes.map((route, index) => (
                 <Route
+                    exact
                     key={index}
                     path={route.path}
-                    exact={route.exact}
                     children={<route.main />}/>
             ))}
         </Switch>

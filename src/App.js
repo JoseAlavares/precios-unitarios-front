@@ -9,40 +9,60 @@ import { TokenProvider } from './context/TokenContext'
 import {
     BrowserRouter,
     Route,
-    Switch
+    Switch,
+    useHistory
 } from 'react-router-dom'
 import Authetication from './containers/Authentication'
 import Registry from './containers/Registry'
-import { withCookies } from 'react-cookie'
+import { withCookies, useCookies } from 'react-cookie'
+import { Provider } from 'react-redux'
+import store from './store'
 
 const { Content } = Layout
 
-function App() {    
-    return (        
-        <BrowserRouter> 
-            <TokenProvider>                                       
-                <Switch>
-                    <Route exact path="/registry" component={Registry}/>
-                    <Route exact path="/auth" component={Authetication}/>                    
-                    <Layout className="dashboard">             
-                        <Headerbar/>            
-                        <Layout style={{ padding: '0 0px 24px' }}>
-                            <Sidebar/>                
-                            <Content
-                                className="site-layout-background"
-                                style={{
-                                    padding: 24,
-                                    margin: 0,
-                                    minHeight: 280,
-                                }}
-                                >
-                                <Routes/>
-                            </Content>
+function App() {
+    const history = useHistory()
+    const [cookies, setCookie, removeCookie] = useCookies(['token'])
+
+    const logout = () => {
+        removeCookie('token')
+        ///history.push('/auth')
+        //window.location.href = '/auth'
+    }
+
+    let open = XMLHttpRequest.prototype.open
+    XMLHttpRequest.prototype.open = function() {
+        this.addEventListener('load', (event) => event.target.status === 401 ? logout() : null, false)
+        open.apply(this, arguments)
+    }
+
+    return (
+        <Provider store={store}>
+            <BrowserRouter> 
+                <TokenProvider>                                       
+                    <Switch>
+                        <Route exact path="/registry" component={Registry}/>
+                        <Route exact path="/auth" component={Authetication}/>                    
+                        <Layout className="dashboard">             
+                            <Headerbar/>            
+                            <Layout style={{ padding: '0 0px 24px' }}>
+                                <Sidebar/>                
+                                <Content
+                                    className="site-layout-background"
+                                    style={{
+                                        padding: 24,
+                                        margin: 0,
+                                        minHeight: 280,
+                                    }}
+                                    >
+                                    <Routes/>
+                                </Content>
+                            </Layout>
                         </Layout>
-                    </Layout>
-                </Switch>
-            </TokenProvider>         
-        </BrowserRouter>      
+                    </Switch>
+                </TokenProvider>         
+            </BrowserRouter>
+        </Provider>
     )
 }
 

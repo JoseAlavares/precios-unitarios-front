@@ -1,0 +1,11 @@
+.plans-box {    
+    position: fixed;
+    display: inline-flex;
+    max-width: 100%;
+    justify-items: center;
+}
+
+.plan{
+    margin: 0.9rem;
+    
+}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import ListPlans from './ListPlans'
 import { 
 	SmileOutlined,
 	BankOutlined,
@@ -12,12 +13,11 @@ import {
 	Select,
 	Button,
 	Alert,
+	Card
 } from 'antd'
 import { useCookies } from 'react-cookie'
 import { useHistory } from 'react-router-dom'
-import { 
-	saveRegistry
-} from '../services/RegistryForm.sevice'
+import { saveRegistry } from '../services/RegistryForm.sevice'
 
 const { Option } = Select
 
@@ -25,12 +25,19 @@ const RegistryForm = () => {
 	const [cookies, setCookie, removeCookie] = useCookies(['token'])
 	const [loading, setLoading] = useState(false)
 	const [showAlert, setShowAlert] = useState(false)
+	const [seePlans, setSeePlans] = useState(false)
+	const [choosePlan, setChoosePlan] = useState(null)
+	const [dataForm, setDataForm] = useState({})
 	const [alertConf, setAlertConf] = useState({})
 	const history = useHistory()
+
+	const handle = () => {
+		setDataForm(...dataForm)
+	}
 	
 	const onFinish = async (values) => {
 		setLoading(true)
-		console.log(values)
+
 		if(values.password !== values.confirm_password) {
 			setShowAlert(true)		
 			setAlertConf({
@@ -45,9 +52,22 @@ const RegistryForm = () => {
 			return
 		}
 
-		const validateUser = ['name', 'email', 'password', 'rol', 'profile_picture']
-    	const validateCompany = ['plan_id', 'company_name', 'rfc', 'company_email', 'legal_representative']
-		const result = await saveRegistry({
+		//const validateUser = ['name', 'email', 'password', 'rol', 'profile_picture']
+		//const validateCompany = ['plan_id', 'company_name', 'rfc', 'company_email', 'legal_representative']
+		setDataForm({
+			name: values.name,
+			personal_email: values.personal_email,
+			password: values.password,
+			rol: values.rol || 1,
+			profile_picture: values.profile_picture || "test",
+			plan_id: values.plan_id,
+			company_name: values.company_name,
+			rfc: values.rfc,
+			company_email: values.company_email,
+			legal_representative: values.name,			
+		})
+		setSeePlans(!seePlans)
+		/*const result = await saveRegistry({
 			name: values.name,
 			personal_email: values.personal_email,
 			password: values.password,
@@ -82,10 +102,12 @@ const RegistryForm = () => {
 			sameSite: 'strict', 
 			secure: true
 		})
-		history.push('/')
+		history.push('/')*/
 	}
 
 	return(
+		<>
+		{!seePlans ?
         <div className="registry-container">
 			{
 				showAlert
@@ -104,7 +126,12 @@ const RegistryForm = () => {
 				<Form.Item
 					name="name"
 					validateStatus="validating"
-					help="Debe contener unicamente letras">
+					help="Debe contener unicamente letras"
+					rules={[{
+						required: true,
+						message: 'Please input your name complete'
+					}]}
+				>
 					<Input prefix={<SmileOutlined/>} placeholder="" name="name" />
 				</Form.Item>
 
@@ -112,7 +139,12 @@ const RegistryForm = () => {
 				<Form.Item
 					name="personal_email"
 					validateStatus="validating"
-					help="Debe ser un correo valido">
+					help="Debe ser un correo valido"
+					rules={[{
+						required: true,
+						message: 'Please input your name complete'
+					}]}
+				>
 					<Input prefix={<MailOutlined />} name="personal_email"/>
 				</Form.Item>
 
@@ -120,7 +152,12 @@ const RegistryForm = () => {
 				<Form.Item
 					name="password"
 					validateStatus="validating"
-					help="Debe ser contener mas de 6 caracteres">
+					help="Debe ser contener mas de 6 caracteres"
+					rules={[{
+						required: true,
+						message: 'Please input your name complete'
+					}]}
+				>
 					<Input.Password prefix={<EyeOutlined />} name="password"/>
 				</Form.Item>
 
@@ -128,7 +165,12 @@ const RegistryForm = () => {
 				<Form.Item
 					name="confirm_password"
 					validateStatus="validating"
-					help="Las contraseñas deben conincidir">
+					help="Las contraseñas deben conincidir"
+					rules={[{
+						required: true,
+						message: 'Please input your name complete'
+					}]}
+				>
 					<Input.Password prefix={<EyeOutlined />} name="confirm_password"/>
 				</Form.Item>
 
@@ -136,7 +178,12 @@ const RegistryForm = () => {
 				<Form.Item 
 					name="company_email"
 					validateStatus="validating" 
-					help="Debe ser un correo valido">
+					help="Debe ser un correo valido"
+					rules={[{
+						required: true,
+						message: 'Please input your name complete'
+					}]}
+				>
 					<Input prefix={<MailOutlined />} placeholder="" name="bussines_email"/>
 				</Form.Item>
 
@@ -144,21 +191,36 @@ const RegistryForm = () => {
 				<Form.Item
 					name="company_name"
 					validateStatus="validating"
-					help="">
+					help=""
+					rules={[{
+						required: true,
+						message: 'Please input your name complete'
+					}]}
+				>
 					<Input prefix={<BankOutlined />} placeholder="" id="validating" />
 				</Form.Item>
 
 				<label>RFC de la empresa "regimen federal de contribuyente"</label>
 				<Form.Item
 					name="rfc"
-					validateStatus="validating">
+					validateStatus="validating"
+					rules={[{
+						required: true,
+						message: 'Please input your name complete'
+					}]}
+				>
 					<Input prefix={<IdcardOutlined />} placeholder=""  name="rfc"/>
 				</Form.Item>    		
 
 				<label>Planes de contratación</label>
 				<Form.Item 
 					name="plan_id"
-					validateStatus="validating">
+					validateStatus="validating"
+					rules={[{
+						required: true,
+						message: 'Please input your name complete'
+					}]}
+				>
 					<Select allowClear>
 						<Option value="0">Seleccione un plan</Option>
 						<Option value="1">Basico</Option>
@@ -169,15 +231,33 @@ const RegistryForm = () => {
 
 				<Form.Item>
 					<Button
-						loading={loading}
+						//loading={loading}
+						//onClick={() => setSeePlans(!seePlans)}
 						type="primary"						
 						htmlType="submit"
-						className="login-form-button">
-						Registrarse
+						className="login-form-button"						
+					>
+						Continuar
 					</Button>
 				</Form.Item>   		
-  			</Form>
-        </div>        
+  			</Form>			
+		</div>
+		:
+		<>
+			<ListPlans setChoosePlan={setChoosePlan}/>
+			<Button 
+				onClick={(e)=> {
+					console.log(dataForm)
+				}}
+				type="primary"						
+				htmlType="submit"
+				className="login-form-button"
+			>
+				form
+			</Button>
+		</>
+		}
+		</>
     )
 }
 

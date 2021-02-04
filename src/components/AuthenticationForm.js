@@ -13,13 +13,15 @@ const AutheticationForm = ({ token }) => {
 	const history = useHistory()
 
 	useEffect(() => {
-		console.log(token)
+		if(cookies.token) {
+			history.push('/home')
+		}
 	})
 
 	const onFinish = async (values) => {
 		setLoading(true)
 		const result = await login(values)
-
+		
 		if(result.error) {
 			setShowAlert(true)
 			setAlertConf({
@@ -33,14 +35,16 @@ const AutheticationForm = ({ token }) => {
 
 			return
 		}
+
 		const {data: {data}} = result.response
-		console.log(data)
+		
 		setLoading(false)
 		setCookie('token', data, {
 			//httpOnly: true, 
 			sameSite: 'strict', 
 			secure: true
 		})
+		
 		history.push('/')
 	}
 
@@ -73,7 +77,9 @@ const AutheticationForm = ({ token }) => {
 						required: true,
 						message: 'Please input your email!',
 					}]}>
-					<Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+					<Input 
+						prefix={<UserOutlined className="site-form-item-icon" />} 
+						placeholder="Username" />
 				</Form.Item>
 				<Form.Item
 					name="password"
